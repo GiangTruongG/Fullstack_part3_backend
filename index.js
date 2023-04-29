@@ -28,6 +28,8 @@ let persons = [
 
 app.use(cors());
 
+app.use(express.static('build'))
+
 const morganLogFunction = morgan((tokens, req, res) => {
     return [
         tokens.method(req, res),
