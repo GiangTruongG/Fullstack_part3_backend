@@ -1,6 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-const axios = require('axios');
 const app = express();
 const morgan = require('morgan');
 const cors = require('cors');
@@ -18,7 +17,7 @@ const morganLogFunction = morgan((tokens, req, res) => {
         tokens.res(req, res, 'content-length'), '-',
         tokens['response-time'](req, res), 'ms',
         req.body.name ? JSON.stringify(req.body) : ''
-      ].join(' ')
+    ].join(' ')
 })
 
 app.use(morganLogFunction);
@@ -51,9 +50,9 @@ const errorHandler = (error, request, response, next) => {
     console.log(error.message);
 
     if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'Malformeatted id'});
+        return response.status(400).send( { error: 'Malformeatted id' } );
     } else if (error.name === 'ValidationError') {
-        return response.status(400).json({ error: error.message});
+        return response.status(400).json( { error: error.message } );
     }
 
     next(error);
@@ -80,7 +79,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
     Person.findByIdAndRemove(personId)
         .then(result => {
-            response.status(204).send('deleted successfully!');
+            response.status(204).send('deleted successfully!', result);
         })
         .catch(error => {
             next(error);
@@ -89,7 +88,7 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 app.put('/api/persons/:id', (request, response) => {
     const body = request.body;
-    const personId = request.params.id; 
+    const personId = request.params.id;
 
     const person = {
         number: body.number
@@ -108,7 +107,7 @@ app.post('/api/persons', (request, response, next) => {
         return response.status(400).json({
             error: 'content missing'
         })
-    };
+    }
 
     const person = new Person({
         name: body.name,
@@ -117,12 +116,11 @@ app.post('/api/persons', (request, response, next) => {
 
     person.save()
         .then(savedPerson => {
-        response.json(savedPerson);
+            response.json(savedPerson);
         })
         .catch(error => {
             next(error);
         })
-    
 });
 
 app.use(errorHandler);

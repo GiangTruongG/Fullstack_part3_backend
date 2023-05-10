@@ -8,7 +8,7 @@ if (process.argv.length < 3) {
         })
     });
     process.exit(1);
-};
+}
 
 const password = process.argv[2];
 
@@ -43,6 +43,7 @@ if (process.argv.length < 4) {
 
     person.save().then(result => {
         console.log(`Added ${process.argv[3]} number ${process.argv[4]} to phonebook!`);
+        result
         mongoose.connection.close();
-    });
-};
+    })
+}
